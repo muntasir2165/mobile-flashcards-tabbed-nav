@@ -1,50 +1,12 @@
 import React, { Component } from "react";
 import { View, Text, Button } from "react-native";
-import { saveDecks, fetchDecks, removeDecks } from "../utils/api";
-import { defaultDecks } from "../utils/defaultDecks";
+import { connect } from "react-redux";
+import { handleSetDeckList, handleEmptyStore } from "../actions";
 
 class DeckListing extends Component {
-  state = {
-    deckListing: {}
-  };
-
-  // Used for debugging purposes
-  componentDidMount1() {
-    removeDecks();
-  }
-
-  componentWillUnmount1() {
-    this.props.navigation.removeListener("didFocus");
-  }
-
   componentDidMount() {
-    this.props.navigation.addListener("didFocus", () => {
-      this.forceUpdate();
-    });
-
-    fetchDecks()
-      .then(decks => {
-        console.log("Current decks in AsyncStorage: " + JSON.stringify(decks));
-        if (!decks || Object.keys(JSON.parse(decks)).length === 0) {
-          console.log("Setting up AsyncStorage with default decks");
-          saveDecks(defaultDecks)
-            .then(() => console.log("Updated AsyncStorage with default decks"))
-            .then(() => {
-              fetchDecks()
-                .then(decks => {
-                  console.log("Fetched default decks from AsyncStorage");
-                  this.setState({
-                    deckListing: JSON.parse(decks)
-                  });
-                })
-                .catch(error => console.log(error));
-            })
-            .catch(error => console.log(error));
-        } else {
-          this.setState({ deckListing: JSON.parse(decks) });
-        }
-      })
-      .catch(error => console.log(error));
+    this.props.handleSetDeckList();
+    // this.props.handleEmptyStore();
   }
 
   render() {
@@ -56,12 +18,12 @@ class DeckListing extends Component {
           justifyContent: "center"
         }}
       >
-        {Object.keys(this.state.deckListing).length > 0 ? (
-          Object.keys(this.state.deckListing).map((deckId, index) => (
+        {Object.keys(this.props.deckListing).length > 0 ? (
+          Object.keys(this.props.deckListing).map((deckId, index) => (
             <Button
-              key={`${index}-${this.state.deckListing[deckId]}`}
-              title={`${this.state.deckListing[deckId].title}\n${
-                this.state.deckListing[deckId].questions.length
+              key={`${index}-${this.props.deckListing[deckId]}`}
+              title={`${this.props.deckListing[deckId].title}\n${
+                this.props.deckListing[deckId].questions.length
               } cards`}
               onPress={() =>
                 this.props.navigation.navigate("DeckDetails", {
@@ -77,5 +39,16 @@ class DeckListing extends Component {
     );
   }
 }
+const mapStateToProps = deckListing => ({
+  deckListing
+});
 
-export default DeckListing;
+const mapDispatchToProps = dispatch => ({
+  handleSetDeckList: () => dispatch(handleSetDeckList()),
+  handleEmptyStore: () => dispatch(handleEmptyStore())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DeckListing);

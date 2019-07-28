@@ -1,18 +1,21 @@
 import {
-  SET_DECK_LIST,
+  SET_DECK_LISTING,
   NEW_DECK,
   DELETE_DECK,
-  NEW_QUESTION_ANSWER
+  NEW_QUESTION_ANSWER,
+  EMPTY_STORE
 } from "../actions";
 
 const decks = (state = {}, action) => {
   switch (action.type) {
-    case SET_DECK_LIST:
+    case SET_DECK_LISTING:
+      console.log(
+        "inside SET_DECK_LISTING: " + JSON.stringify(action.deckListing)
+      );
       return {
         ...state,
-        ...action.deckList
+        ...action.deckListing
       };
-
     case NEW_DECK:
       return {
         ...state,
@@ -36,6 +39,11 @@ const decks = (state = {}, action) => {
           ]
         }
       };
+    case EMPTY_STORE:
+      console.log(
+        "inside EMPTY_STORE: " + JSON.stringify(action.deckListing)
+      );
+      return {};
     default:
       return state;
   }
