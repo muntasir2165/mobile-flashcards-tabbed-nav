@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import AddDeck from "./components/AddDeck";
 import AddCard from "./components/AddCard";
+import AddDeck from "./components/AddDeck";
 import DeckDetails from "./components/DeckDetails";
 import DeckListing from "./components/DeckListing";
 import Quiz from "./components/Quiz";
@@ -31,7 +31,6 @@ const MainNavigator = createBottomTabNavigator(
   },
   {
     tabBarPosition: "bottom",
-    swipeEnabled: true,
     tabBarOptions: {
       activeTintColor: "#f2f2f2",
       activeBackgroundColor: "#2EC4B6",
@@ -44,14 +43,6 @@ const MainNavigator = createBottomTabNavigator(
   }
 );
 
-function App() {
-  return (
-    <View style={styles.container}>
-      <Text>in here</Text>
-      <MainNavigator />
-    </View>
-  );
-}
 export default createAppContainer(MainNavigator);
 
 const styles = StyleSheet.create({

@@ -5,7 +5,7 @@ class DeckDetails extends Component {
   render() {
     return (
       <View>
-        <Text style={{ fontSize: 20 }}>DeckDetails</Text>
+        <Text style={{ fontSize: 20 }}>{this.props.navigation.state.params.deck.title}</Text>
       </View>
     );
   }
