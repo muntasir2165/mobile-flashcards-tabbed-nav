@@ -10,6 +10,10 @@ export const fetchDecks = () => {
   return AsyncStorage.getItem(DECK_STORAGE_KEY);
 };
 
+export const removeDecks = () => {
+  return AsyncStorage.removeItem(DECK_STORAGE_KEY);
+};
+
 // export const updateDecks = deckList => {
 //   return AsyncStorage.mergeItem(
 //     DECK_STORAGE_KEY,

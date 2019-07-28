@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, Button } from "react-native";
-import { saveDecks, fetchDecks } from "../utils/api";
+import { saveDecks, fetchDecks, removeDecks } from "../utils/api";
 import { defaultDecks } from "../utils/defaultDecks";
 
 class DeckListing extends Component {
@@ -10,17 +10,22 @@ class DeckListing extends Component {
 
   // Used for debugging purposes
   componentDidMount1() {
-    saveDecks({});
+    removeDecks();
+  }
+
+  componentWillUnmount1() {
+    this.props.navigation.removeListener("didFocus");
   }
 
   componentDidMount() {
+    this.props.navigation.addListener("didFocus", () => {
+      this.forceUpdate();
+    });
+
     fetchDecks()
       .then(decks => {
         console.log("Current decks in AsyncStorage: " + JSON.stringify(decks));
-        if (
-          !JSON.stringify(decks) ||
-          Object.keys(JSON.parse(decks)).length === 0
-        ) {
+        if (!decks || Object.keys(JSON.parse(decks)).length === 0) {
           console.log("Setting up AsyncStorage with default decks");
           saveDecks(defaultDecks)
             .then(() => console.log("Updated AsyncStorage with default decks"))

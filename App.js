@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import { StyleSheet, Text, View } from "react-native";
 import AddCard from "./components/AddCard";
 import AddDeck from "./components/AddDeck";
@@ -12,6 +12,9 @@ import {
 } from "react-navigation";
 import { purple, white } from "./utils/colors";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import reducer from "./reducers";
 
 const DeckStack = createStackNavigator({
   DeckListing: { screen: DeckListing },
@@ -20,7 +23,7 @@ const DeckStack = createStackNavigator({
   Quiz: { screen: Quiz },
 });
 
-const MainNavigator = createBottomTabNavigator(
+const MainNavigator = createAppContainer(createBottomTabNavigator(
   {
     Decks: {
       screen: DeckStack
@@ -41,9 +44,18 @@ const MainNavigator = createBottomTabNavigator(
       }
     }
   }
-);
+));
 
-export default createAppContainer(MainNavigator);
+
+export default class App extends Component {
+  render() {
+    return (
+      <Provider store={createStore(reducer)}>
+        <MainNavigator />
+      </Provider>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {

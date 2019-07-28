@@ -8,20 +8,20 @@ class DeckDetails extends Component {
   };
   componentDidMount() {
     fetchDecks()
-      .then(decks => this.setState({ deckListing: decks }))
+      .then(decks => this.setState({ deckListing: JSON.parse(decks) }))
       .catch(error => console.log(error));
   }
 
   deleteDeck = deckId => {
-    // console.log("Id of the deck to delete: " + deckId);
-    // console.log("Current decks: " + JSON.stringify(this.state.deckListing));
-    // const currentDecks = { ...this.state.deckListing };
-    // currentDecks[deckId] = undefined;
-    // delete currentDecks[deckId];
-    // console.log("Decks after the delete: " + JSON.stringify(currentDecks));
-    // saveDecks(currentDecks)
-    //   .then(() => this.props.navigation.navigate("DeckListing"))
-    //   .catch(error => console.log(error));
+    console.log("Id of the deck to delete: " + deckId);
+    console.log("Current decks: " + JSON.stringify(this.state.deckListing));
+    const currentDecks = { ...this.state.deckListing };
+    currentDecks[deckId] = undefined;
+    delete currentDecks[deckId];
+    console.log("Decks after the delete: " + JSON.stringify(currentDecks));
+    saveDecks(currentDecks)
+      .then(() => this.props.navigation.navigate("DeckListing"))
+      .catch(error => console.log(error));
   };
 
   render() {
