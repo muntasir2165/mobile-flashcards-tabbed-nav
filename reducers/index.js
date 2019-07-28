@@ -13,7 +13,6 @@ const decks = (state = {}, action) => {
         "inside SET_DECK_LISTING: " + JSON.stringify(action.deckListing)
       );
       return {
-        ...state,
         ...action.deckListing
       };
     case NEW_DECK:
@@ -40,9 +39,6 @@ const decks = (state = {}, action) => {
         }
       };
     case EMPTY_STORE:
-      console.log(
-        "inside EMPTY_STORE: " + JSON.stringify(action.deckListing)
-      );
       return {};
     default:
       return state;

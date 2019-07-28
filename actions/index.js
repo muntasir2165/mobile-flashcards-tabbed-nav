@@ -25,13 +25,13 @@ export const handleSetDeckList = () => {
               fetchDecks()
                 .then(decks => {
                   console.log("Fetched default decks from AsyncStorage");
-                   dispatch(setDeckListing(decks));
+                  dispatch(setDeckListing(decks));
                 })
                 .catch(error => console.log(error));
             })
             .catch(error => console.log(error));
         } else {
-           dispatch(setDeckListing(decks));
+          dispatch(setDeckListing(decks));
         }
       })
       .catch(error => console.log(error));
@@ -43,10 +43,22 @@ export const newDeck = title => ({
   title
 });
 
-export const deleteDeck = title => ({
+const deleteDeck = newDeck => ({
   type: NEW_DECK,
-  title
+  newDeck
 });
+
+export const handleDeleteDeck = newDeck => {
+  return dispatch => {
+    saveDecks(newDeck)
+      .then(() =>
+        fetchDecks()
+          .then(decks => dispatch(setDeckListing(decks)))
+          .catch(error => console.log(error))
+      )
+      .catch(error => console.log(error));
+  };
+};
 
 export const newQuestionAnswer = (title, question, answer) => ({
   type: NEW_QUESTION_ANSWER,

@@ -9,7 +9,11 @@ class DeckListing extends Component {
     // this.props.handleEmptyStore();
   }
 
+  refresh = () => {
+    this.forceUpdate();
+  }
   render() {
+    console.log("------Current deck size:", Object.keys(this.props.deckListing).length);
     return (
       <View
         style={{
@@ -39,6 +43,7 @@ class DeckListing extends Component {
     );
   }
 }
+
 const mapStateToProps = deckListing => ({
   deckListing
 });

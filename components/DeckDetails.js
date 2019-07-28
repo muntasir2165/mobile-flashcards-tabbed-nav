@@ -1,27 +1,22 @@
 import React, { Component } from "react";
 import { View, TouchableOpacity, Text } from "react-native";
-import { saveDecks, fetchDecks } from "../utils/api";
+import { connect } from "react-redux";
+import { handleDeleteDeck } from "../actions";
 
 class DeckDetails extends Component {
-  state = {
-    deckListing: {}
-  };
-  componentDidMount() {
-    fetchDecks()
-      .then(decks => this.setState({ deckListing: JSON.parse(decks) }))
-      .catch(error => console.log(error));
-  }
-
   deleteDeck = deckId => {
     console.log("Id of the deck to delete: " + deckId);
-    console.log("Current decks: " + JSON.stringify(this.state.deckListing));
-    const currentDecks = { ...this.state.deckListing };
+    console.log("Current decks: " + JSON.stringify(this.props.deckListing));
+    const currentDecks = { ...this.props.deckListing };
     currentDecks[deckId] = undefined;
     delete currentDecks[deckId];
     console.log("Decks after the delete: " + JSON.stringify(currentDecks));
-    saveDecks(currentDecks)
-      .then(() => this.props.navigation.navigate("DeckListing"))
-      .catch(error => console.log(error));
+    this.props.handleDeleteDeck(currentDecks);
+    // this.props.navigation.navigate("DeckListing");
+    // this.props.navigation.goBack();
+        this.props.navigation.navigate("DeckListing", {
+          onGoBack: () => this.refresh()
+        });
   };
 
   render() {
@@ -45,4 +40,15 @@ class DeckDetails extends Component {
   }
 }
 
-export default DeckDetails;
+const mapStateToProps = deckListing => ({
+  deckListing
+});
+
+const mapDispatchToProps = dispatch => ({
+  handleDeleteDeck: () => dispatch(handleDeleteDeck())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DeckDetails);
